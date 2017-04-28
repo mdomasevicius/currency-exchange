@@ -1,5 +1,34 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
+
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+mainClassName = 'lt.danske.currency.App'
+
+shadowJar {
+    archiveName = "${project.name}-shadow.jar"
+    zip64 true
+
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+
+    transform(ServiceFileTransformer)
+    transform(AppendingTransformer) { resource = 'reference.conf' }
+    transform(AppendingTransformer) { resource = 'META-INF/spring.handlers' }
+    transform(AppendingTransformer) { resource = 'META-INF/spring.schemas' }
+    transform(AppendingTransformer) { resource = 'META-INF/spring.tooling' }
+    transform(PropertiesFileTransformer) {
+        paths = ['META-INF/spring.factories']
+        mergeStrategy = 'append'
+    }
+}
+
 dependencies {
 
+    compile project(':app-ui')
     compile project(':converter')
     compile project(':converter-api')
 

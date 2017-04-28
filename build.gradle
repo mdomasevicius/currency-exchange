@@ -5,6 +5,7 @@ buildscript {
         maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
         classpath 'io.spring.gradle:dependency-management-plugin:0.6.0.RELEASE'
     }
 }
