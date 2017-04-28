@@ -7,7 +7,7 @@ export const types = {
 const convert = (baseCurrency, targetCurrency, amount) => ({
   type: types.CONVERT_CURRENCY,
   payload: {
-    promise: axios.get('/api/currency/conversion', {
+    promise: axios.get('/api/exchange/conversion', {
       params: {
         baseCurrency: baseCurrency,
         targetCurrency: targetCurrency,

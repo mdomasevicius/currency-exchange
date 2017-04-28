@@ -4,10 +4,10 @@ import lt.danske.currency.converter.yahoo.YahooFinanceGateway
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class CurrencyConverterSpec extends Specification {
+class CurrencyExchangeSpec extends Specification {
 
     def yahooFinanceGateway = Mock(YahooFinanceGateway)
-    def currencyConverterService = new DefaultCurrencyConverterService(yahooFinanceGateway)
+    def currencyConverterService = new DefaultCurrencyExchangeService(yahooFinanceGateway)
 
     @Unroll
     def 'when #amount (#baseCurrency) converted to #targetCurrency with rate of #rate should be #expectedAmount'() {

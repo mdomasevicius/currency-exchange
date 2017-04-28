@@ -9,11 +9,11 @@ import java.math.BigDecimal;
 import static java.math.BigDecimal.*;
 
 @Service
-class DefaultCurrencyConverterService implements CurrencyConverterService {
+class DefaultCurrencyExchangeService implements CurrencyExchangeService {
 
     private final YahooFinanceGateway yahooFinanceGateway;
 
-    DefaultCurrencyConverterService(YahooFinanceGateway yahooFinanceGateway) {
+    DefaultCurrencyExchangeService(YahooFinanceGateway yahooFinanceGateway) {
         this.yahooFinanceGateway = yahooFinanceGateway;
     }
 

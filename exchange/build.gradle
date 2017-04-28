@@ -1,5 +1,5 @@
 dependencies {
-    compile project(':converter-api')
+    compile project(':exchange-api')
 
     compile lib.spring_boot_web
 

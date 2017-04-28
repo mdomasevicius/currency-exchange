@@ -1,7 +1,7 @@
-rootProject.name = 'currency-conversion-app'
+rootProject.name = 'currency-exchange-app'
 
 include ':app'
 include ':app-ui'
-include ':converter'
-include ':converter-api'
+include ':exchange'
+include ':exchange-api'
 include ':acceptance'

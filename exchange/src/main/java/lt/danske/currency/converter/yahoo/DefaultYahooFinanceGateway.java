@@ -23,7 +23,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
     @Value("${yahoo-finance.apiUrl}")
     private String apiUrl;
 
-    public DefaultYahooFinanceGateway(RestOperations rest) {
+    DefaultYahooFinanceGateway(RestOperations rest) {
         this.rest = rest;
     }
 

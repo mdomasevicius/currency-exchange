@@ -32,8 +32,8 @@ assemble.dependsOn = ['shadowJar']
 dependencies {
 
     compile project(':app-ui')
-    compile project(':converter')
-    compile project(':converter-api')
+    compile project(':exchange')
+    compile project(':exchange-api')
 
     compile lib.spring_boot_web
     compile lib.spring_boot_actuator

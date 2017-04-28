@@ -1,6 +1,6 @@
 package lt.danske.currency.api;
 
-import lt.danske.currency.converter.CurrencyConverterService;
+import lt.danske.currency.converter.CurrencyExchangeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("/api/currency")
+@RequestMapping("/api/exchange")
 class CurrencyConversionResource {
 
-    private final CurrencyConverterService currencyConverterService;
+    private final CurrencyExchangeService currencyExchangeService;
 
-    CurrencyConversionResource(CurrencyConverterService currencyConverterService) {
-        this.currencyConverterService = currencyConverterService;
+    CurrencyConversionResource(CurrencyExchangeService currencyExchangeService) {
+        this.currencyExchangeService = currencyExchangeService;
     }
 
     @GetMapping("/conversion")
@@ -25,7 +25,7 @@ class CurrencyConversionResource {
         @RequestParam String targetCurrency,
         @RequestParam BigDecimal amount) {
 
-        BigDecimal convertedAmount = currencyConverterService.convert(baseCurrency, targetCurrency, amount);
+        BigDecimal convertedAmount = currencyExchangeService.convert(baseCurrency, targetCurrency, amount);
         return ResponseEntity.ok(new CurrencyConversionRepresentation(convertedAmount));
     }
 

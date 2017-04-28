@@ -12,7 +12,7 @@ class ConversionSpec extends Specification {
     def 'user can convert currencies'() {
         when:
             def response = rest.get(
-                '/api/currency/conversion',
+                '/api/exchange/conversion',
                 [
                     baseCurrency  : 'EUR',
                     targetCurrency: 'USD',
@@ -27,7 +27,7 @@ class ConversionSpec extends Specification {
 
     def 'all query parameters are required'() {
         expect:
-            rest.get('/api/currency/conversion').status == expectedResponse
+            rest.get('/api/exchange/conversion').status == expectedResponse
         where:
             queryParams                                  || expectedResponse
             [targetCurrency: 'USD', amount: 100]         || 400
