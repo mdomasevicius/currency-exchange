@@ -26,6 +26,9 @@ shadowJar {
     }
 }
 
+jar.enabled = false
+assemble.dependsOn = ['shadowJar']
+
 dependencies {
 
     compile project(':app-ui')
