@@ -13,8 +13,8 @@ buildscript {
 group 'lt.danske.currency'
 version '1.0-SNAPSHOT'
 
-def sourceProjects = allprojects.findAll { it.file('src/main').exists() }
-configure(sourceProjects) {
+
+allprojects {
     apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
@@ -30,7 +30,5 @@ configure(sourceProjects) {
     repositories {
         mavenCentral()
     }
-
-
 }
 

@@ -27,9 +27,10 @@ project.ext.lib = [
     spring_data_commons  : 'org.springframework.data:spring-data-commons',
     hibernate_java8      : "org.hibernate:hibernate-java8:$hibernate_version",
 
-    h2                 : 'com.h2database:h2:1.4.195',
+    h2                   : 'com.h2database:h2:1.4.195',
 
     spring_boot_web      : "org.springframework.boot:spring-boot-starter-web:$spring_boot_version",
+    spring_boot_actuator : "org.springframework.boot:spring-boot-starter-actuator:$spring_boot_version",
     spring_boot_hateoas  : "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version",
     spring_boot_test     : "org.springframework.boot:spring-boot-starter-test:$spring_boot_version",
     spring_context       : 'org.springframework:spring-context',
@@ -55,7 +56,7 @@ project.ext.lib = [
 
     slf4j_api            : 'org.slf4j:slf4j-api',
     logback              : 'ch.qos.logback:logback-classic:1.1.11',
-    janino                : 'org.codehaus.janino:janino:2.7.8'
+    janino               : 'org.codehaus.janino:janino:2.7.8'
 
 ]
 

@@ -33,4 +33,5 @@ dependencies {
     compile project(':converter-api')
 
     compile lib.spring_boot_web
+    compile lib.spring_boot_actuator
 }

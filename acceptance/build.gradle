@@ -1,0 +1,74 @@
+import org.gradle.api.tasks.testing.logging.TestLoggingContainer
+
+import java.nio.file.Paths
+import java.time.Duration
+
+plugins {
+    id 'groovy'
+    id 'com.avast.gradle.docker-compose' version '0.3.23'
+}
+
+test {
+    // Disabled by default, activated with -Pacceptance
+    enabled = false
+
+    minHeapSize = '128m'
+    maxHeapSize = '128m'
+}
+
+test {
+    // Disabled by default, activated with -Pacceptance
+    enabled = false
+
+    maxParallelForks = 3
+    minHeapSize = '128m'
+    maxHeapSize = '128m'
+
+    testLogging { TestLoggingContainer log ->
+        log.showStackTraces = true
+        log.exceptionFormat = 'full'
+        log.events 'passed', 'skipped', 'failed'
+    }
+}
+
+dockerCompose {
+    useComposeFiles = ['../docker-compose.yaml']
+    waitForTcpPortsTimeout = Duration.ofMinutes(8)
+    waitAfterTcpProbeFailure = Duration.ofSeconds(5)
+}
+
+task dockerComposeLogs(type: Exec) {
+    commandLine = ['docker-compose', 'logs', '--no-color']
+    def logFile = Paths.get(project.buildDir.absolutePath, 'docker-compose-out.log').toFile()
+    doFirst {
+        standardOutput = new FileOutputStream(logFile)
+    }
+    doLast {
+        println "docker-compose output available at: ${logFile.absolutePath}"
+    }
+}
+
+if (project.hasProperty('acceptance')) {
+    afterEvaluate {
+        composeUp.dependsOn project(':app').assemble
+        composePull.dependsOn project(':app').assemble
+    }
+    dockerCompose.isRequiredBy(test)
+
+    test {
+        enabled = true
+        doFirst {
+            dockerCompose.exposeAsEnvironment(test)
+            dockerCompose.exposeAsSystemProperties(test)
+        }
+    }
+    test.finalizedBy dockerComposeLogs
+    composeDown.mustRunAfter dockerComposeLogs
+    composeUp.dependsOn composePull
+}
+
+dependencies {
+    testCompile lib.groovy_core
+    testCompile lib.groovy_http
+    testCompile lib.spock_core
+}
