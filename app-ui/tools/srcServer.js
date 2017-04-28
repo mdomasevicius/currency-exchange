@@ -10,8 +10,12 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import config from '../webpack.config.dev';
+import url from 'url';
+import proxy from 'proxy-middleware';
 
 const bundler = webpack(config);
+const proxyOptions = url.parse('http://localhost:8080/api/currency');
+proxyOptions.route = '/api/currency';
 
 // Run Browsersync and use middleware for Hot Module Replacement
 browserSync({
@@ -47,7 +51,8 @@ browserSync({
       }),
 
       // bundler should be the same as above
-      webpackHotMiddleware(bundler)
+      webpackHotMiddleware(bundler),
+      proxy(proxyOptions)
     ]
   },
 

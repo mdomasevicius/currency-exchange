@@ -1,7 +1,9 @@
 import {createStore, compose, applyMiddleware} from 'redux';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import thunk from 'redux-thunk';
-import rootReducer from '../reducers';
+import rootReducer from './root-reducer';
+import promise from 'redux-promise-middleware';
+import logger from 'redux-logger';
 
 function configureStoreProd(initialState) {
   const middlewares = [
@@ -9,6 +11,7 @@ function configureStoreProd(initialState) {
 
     // thunk middleware can also accept an extra argument to be passed to each thunk action
     // https://github.com/gaearon/redux-thunk#injecting-a-custom-argument
+      promise(),
     thunk,
   ];
 
@@ -24,7 +27,8 @@ function configureStoreDev(initialState) {
 
     // Redux middleware that spits an error on you when you try to mutate your state either inside a dispatch or between dispatches.
     reduxImmutableStateInvariant(),
-
+      promise(),
+      logger,
     // thunk middleware can also accept an extra argument to be passed to each thunk action
     // https://github.com/gaearon/redux-thunk#injecting-a-custom-argument
     thunk,
@@ -38,8 +42,8 @@ function configureStoreDev(initialState) {
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers').default; // eslint-disable-line global-require
+    module.hot.accept('./root-reducer', () => {
+      const nextReducer = require('./root-reducer').default; // eslint-disable-line global-require
       store.replaceReducer(nextReducer);
     });
   }
