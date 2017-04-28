@@ -12,3 +12,6 @@ out
 .classpath
 .settings
 .project
+
+node_modules
+npm-debug.log.*
