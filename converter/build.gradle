@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':converter-api')
+
+    compile lib.spring_boot_web
+
+    testCompile lib.groovy_core
+    testCompile lib.spock_spring
+    testCompile lib.spring_boot_test
+}
