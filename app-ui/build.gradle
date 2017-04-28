@@ -13,11 +13,14 @@ task npmInit(type: Exec) {
   description = 'Install NPM dependencies'
   commandLine = [npmExec, 'install']
   inputs.files 'package.json'
+  outputs.dir 'node_modules'
 }
 
 task npmBuild(dependsOn: npmInit, type: Exec) {
   description = 'NPM build'
   commandLine = [npmExec, 'run', 'build']
+  inputs.dir 'src'
+  outputs.dir 'dist'
 }
 
 clean.doLast {
