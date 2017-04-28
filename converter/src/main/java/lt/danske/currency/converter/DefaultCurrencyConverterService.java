@@ -23,7 +23,7 @@ class DefaultCurrencyConverterService implements CurrencyConverterService {
         Assert.notNull(targetCurrency, "targetCurrency can not be null");
         Assert.notNull(amount, "amount can not be null");
 
-        BigDecimal rate = yahooFinanceGateway.retrieveExchangeRate(targetCurrency, baseCurrency);
+        BigDecimal rate = yahooFinanceGateway.retrieveExchangeRate(baseCurrency, targetCurrency);
         return amount.multiply(rate)
             .setScale(2, ROUND_HALF_UP);
     }
