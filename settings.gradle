@@ -1,3 +1,4 @@
 rootProject.name = 'currency-conversion-app'
 
 include ':converter'
+include ':converter-api'
