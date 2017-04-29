@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/exchange")
-class CurrencyConversionResource {
+class CurrencyExchangeRest {
 
     private final CurrencyExchangeService currencyExchangeService;
 
-    CurrencyConversionResource(CurrencyExchangeService currencyExchangeService) {
+    CurrencyExchangeRest(CurrencyExchangeService currencyExchangeService) {
         this.currencyExchangeService = currencyExchangeService;
     }
 
@@ -26,14 +26,14 @@ class CurrencyConversionResource {
         @RequestParam BigDecimal amount) {
 
         BigDecimal convertedAmount = currencyExchangeService.convert(baseCurrency, targetCurrency, amount);
-        return ResponseEntity.ok(new CurrencyConversionRepresentation(convertedAmount));
+        return ResponseEntity.ok(new CurrencyConversionResource(convertedAmount));
     }
 
-    static class CurrencyConversionRepresentation {
+    static class CurrencyConversionResource {
 
         private final BigDecimal convertedAmount;
 
-        CurrencyConversionRepresentation(BigDecimal convertedAmount) {
+        CurrencyConversionResource(BigDecimal convertedAmount) {
             this.convertedAmount = convertedAmount;
         }
 
