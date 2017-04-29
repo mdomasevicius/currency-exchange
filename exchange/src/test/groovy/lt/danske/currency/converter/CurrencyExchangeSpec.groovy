@@ -1,5 +1,6 @@
 package lt.danske.currency.converter
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import lt.danske.currency.converter.yahoo.YahooFinanceGateway
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -7,14 +8,14 @@ import spock.lang.Unroll
 class CurrencyExchangeSpec extends Specification {
 
     def yahooFinanceGateway = Mock(YahooFinanceGateway)
-    def currencyConverterService = new DefaultCurrencyExchangeService(yahooFinanceGateway)
+    def currencyExchangeService = new DefaultCurrencyExchangeService(yahooFinanceGateway, new ObjectMapper())
 
     @Unroll
     def 'when #amount (#baseCurrency) converted to #targetCurrency with rate of #rate should be #expectedAmount'() {
         given:
             yahooFinanceGateway.retrieveExchangeRate(_, _) >> BigDecimal.valueOf(rate)
         expect:
-            expectedAmount == currencyConverterService.convert(baseCurrency, targetCurrency, amount)
+            expectedAmount == currencyExchangeService.convert(baseCurrency, targetCurrency, amount)
         where:
             baseCurrency | targetCurrency | amount || rate    | expectedAmount
             'USD'        | 'EUR'          | 100    || 0.9     | 90
@@ -27,7 +28,7 @@ class CurrencyExchangeSpec extends Specification {
     def 'should throw IllegalArgumentException if any argument is null'() {
         when:
             yahooFinanceGateway.retrieveExchangeRate(_, _) >> BigDecimal.valueOf(1)
-            currencyConverterService.convert(baseCurrency, targetCurrency, amount)
+            currencyExchangeService.convert(baseCurrency, targetCurrency, amount)
         then:
             thrown IllegalArgumentException
         where:
@@ -35,6 +36,14 @@ class CurrencyExchangeSpec extends Specification {
             null         | 'EUR'          | 100
             'USD'        | null           | 150
             'AUD'        | 'CAD'          | null
+    }
+
+    def 'must provide common currency codes'() {
+        when:
+            def commonCurrencies = currencyExchangeService.getCommonCurrencyCodes()
+        then:
+            commonCurrencies
+            commonCurrencies.size() > 0
     }
 
 }

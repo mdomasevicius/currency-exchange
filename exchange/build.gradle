@@ -2,6 +2,7 @@ dependencies {
     compile project(':exchange-api')
 
     compile lib.spring_boot_web
+    compile lib.commons_io
 
     testCompile lib.groovy_core
     testCompile lib.spock_spring
