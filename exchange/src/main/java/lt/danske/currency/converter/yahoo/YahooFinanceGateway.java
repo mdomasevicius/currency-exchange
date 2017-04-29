@@ -6,6 +6,8 @@ public interface YahooFinanceGateway {
 
     BigDecimal retrieveExchangeRate(String baseCurrency, String targetCurrency);
 
+    YahooCurrencyHistoryDto retrieve10DayExchangeRateHistory(String currencyCode);
+
     void clearCurrencyRateCache();
 
 }
