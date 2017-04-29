@@ -5,7 +5,10 @@ import lt.danske.currency.converter.ExchangeValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -27,6 +30,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
         this.rest = rest;
     }
 
+    @Cacheable(value = "currency_rates")
     @Override
     public BigDecimal retrieveExchangeRate(String baseCurrency, String targetCurrency) {
         ResponseEntity<JsonNode> response = rest.getForEntity(
@@ -76,5 +80,11 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
                 "store://datatables.org/alltableswithkeys")
             .build()
             .toUri();
+    }
+
+    @CacheEvict(allEntries = true, value = "currency_rates")
+    @Scheduled(cron = "${scheduler.caches.currency_rates:0 */5 * * * *}")
+    public void clearCurrencyRateCache() {
+        log.info("Currency rate cache cleared.");
     }
 }

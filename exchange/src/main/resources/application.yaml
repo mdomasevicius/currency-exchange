@@ -1,2 +1,6 @@
 yahoo-finance:
   apiUrl: 'https://query.yahooapis.com/v1/public/yql'
+
+scheduler:
+    caches:
+        currency_rates: '0 */5 * * * *'
