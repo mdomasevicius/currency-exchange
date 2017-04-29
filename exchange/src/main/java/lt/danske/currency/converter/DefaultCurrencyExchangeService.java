@@ -2,6 +2,7 @@ package lt.danske.currency.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lt.danske.currency.converter.yahoo.YahooCurrencyHistoryDto;
 import lt.danske.currency.converter.yahoo.YahooFinanceGateway;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -13,8 +14,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
+import static java.util.stream.Collectors.*;
 import static lt.danske.currency.converter.ExchangeValidationException.ValidationError;
 import static lt.danske.currency.converter.ExchangeValidationException.withError;
 
@@ -67,6 +70,29 @@ class DefaultCurrencyExchangeService implements CurrencyExchangeService {
             throw withError("currencies.json", "failed to load");
         }
         return currencyMap;
+    }
+
+    @Override
+    public CurrencyHistoryDto findCurrencyRateHistory(String currencyCode) {
+        if (!getCommonCurrencyCodes().containsKey(currencyCode)) {
+            throw ExchangeValidationException.withError("currencyCode", "invalid");
+        }
+
+        YahooCurrencyHistoryDto yahooCurrencyHistory = yahooFinanceGateway.retrieve10DayExchangeRateHistory(currencyCode);
+
+        CurrencyHistoryDto currencyHistoryDto = new CurrencyHistoryDto();
+        currencyHistoryDto.setCurrencyCode(yahooCurrencyHistory.getCurrencyCode());
+        currencyHistoryDto.setQuotes(
+            yahooCurrencyHistory.getQuotes()
+            .stream()
+            .map(yahooQuote -> {
+                QuoteDto quote = new QuoteDto();
+                quote.setDate(yahooQuote.getDate());
+                quote.setHigh(yahooQuote.getHigh());
+                return quote;
+            }).collect(toList())
+        );
+        return currencyHistoryDto;
     }
 
 

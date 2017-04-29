@@ -1,6 +1,7 @@
 package lt.danske.currency.api;
 
 import lt.danske.currency.converter.CurrencyExchangeService;
+import lt.danske.currency.converter.CurrencyHistoryDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,11 @@ class CurrencyExchangeRest {
     @GetMapping("/currencies")
     ResponseEntity<List<CurrencyCodeResource>> getCurrencyCodes() {
         return ok(CurrencyCodeResource.fromMap(currencyExchangeService.getCommonCurrencyCodes()));
+    }
+
+    @GetMapping("/history")
+    ResponseEntity<CurrencyHistoryDto> getExchangeRateHistory(@RequestParam String currencyCode) {
+        return ok(currencyExchangeService.findCurrencyRateHistory(currencyCode));
     }
 
     static class CurrencyConversionResource {
