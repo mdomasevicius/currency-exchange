@@ -24,7 +24,7 @@ import static lt.danske.currency.converter.ExchangeValidationException.withError
 @Service
 class DefaultCurrencyExchangeService implements CurrencyExchangeService {
 
-    private final Logger log = LoggerFactory.getLogger(DefaultCurrencyExchangeService.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultCurrencyExchangeService.class);
     private final YahooFinanceGateway yahooFinanceGateway;
     private final ObjectMapper objectMapper;
 

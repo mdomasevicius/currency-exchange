@@ -3,11 +3,13 @@ package lt.danske.currency.converter.yahoo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lt.danske.currency.converter.ExchangeValidationException;
+import lt.danske.currency.converter.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -53,16 +55,17 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
 
     @Override
     public YahooCurrencyHistoryDto retrieve10DayExchangeRateHistory(String currencyCode) {
-        ResponseEntity<JsonNode> response = rest.getForEntity(toCurrencyHistoryUri(
-            currencyCode, ZonedDateTime.now().minusDays(10), ZonedDateTime.now()),
+        ResponseEntity<JsonNode> response = rest.getForEntity(
+            toCurrencyHistoryUri(
+                currencyCode,
+                ZonedDateTime.now().minusDays(10),
+                ZonedDateTime.now()),
             JsonNode.class);
 
-        YahooCurrencyHistoryDto yahooCurrencyHistoryDto = mapHistoricalDataOfFail(response);
-        yahooCurrencyHistoryDto.setCurrencyCode(currencyCode);
-        return yahooCurrencyHistoryDto;
+        return mapHistoricalDataOfFail(response, currencyCode);
     }
 
-    private YahooCurrencyHistoryDto mapHistoricalDataOfFail(ResponseEntity<JsonNode> response) {
+    private YahooCurrencyHistoryDto mapHistoricalDataOfFail(ResponseEntity<JsonNode> response, String currencyCode) {
         YahooCurrencyHistoryDto exchangeHistory;
         try {
             exchangeHistory = mapper.treeToValue(
@@ -78,6 +81,12 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
                 "yahooApi",
                 "could not parse yahoo api response");
         }
+
+        if (exchangeHistory == null) {
+            throw new NotFoundException();
+        }
+
+        exchangeHistory.setCurrencyCode(currencyCode);
         return exchangeHistory;
     }
 
@@ -125,7 +134,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
             .queryParam("q", String.format(
                 "select * from " +
                     "yahoo.finance.historicaldata " +
-                    "where symbol=\"%s\" " +
+                    "where symbol=\"%s=X\" " + //currency exchange rate in relation to USD
                     "and startDate=\"%s\" " +
                     "and endDate=\"%s\"", currency, startDate, endDate))
             .queryParam("format", "json")
