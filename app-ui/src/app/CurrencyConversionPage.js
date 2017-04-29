@@ -78,6 +78,7 @@ class CurrencyConversionPage extends React.Component {
         }}>
           <div>
             <TextField
+              floatingLabelText="Amount"
               id="amount"
               hintText="Amount"
               onChange={this.handleAmountChange}
@@ -92,6 +93,7 @@ class CurrencyConversionPage extends React.Component {
 
           <div>
             <TextField
+              floatingLabelText="Converted Amount"
               id="converted_amount"
               disabled={true}
               value={convertedAmount}/>
