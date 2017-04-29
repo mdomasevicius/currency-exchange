@@ -7,6 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
+import HistoricalDataChart from './HistoricalDataChart';
 
 const propTypes = {
   actions: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
@@ -31,10 +32,11 @@ class CurrencyConversionPage extends React.Component {
 
     this.props.actions.retrieveCommonCurrencies();
     this.props.actions.convert(baseCurrency, targetCurrency, amount);
+    this.props.actions.retrieveCurrencyHistory(baseCurrency);
   }
 
   handleBaseCurrencyChange(event, index, value) {
-    this.props.actions.changeBaseCurrency(value);
+    this.props.actions.changeBaseCurrencyAndRetrieveHistory(value);
   }
 
   handleTargetCurrencyChange(event, index, value) {
@@ -52,7 +54,8 @@ class CurrencyConversionPage extends React.Component {
       targetCurrency,
       baseCurrency,
       amount,
-      convertingInProgress
+      convertingInProgress,
+      exchangeRateHistory
     } = this.props.currencyConversionState;
 
     const mappedCurrencyCodes = commonCurrencies.map((c) => {
@@ -62,7 +65,9 @@ class CurrencyConversionPage extends React.Component {
     return (
       <div >
         <div style={{height: '10vh'}}>
-          <LinearProgress style={convertingInProgress ? '' : {display: 'none'} } mode="indeterminate"/>
+          <span style={convertingInProgress ? {} : {display: 'none'}}>
+            <LinearProgress mode="indeterminate"/>
+          </span>
         </div>
 
         <div style={{
@@ -73,6 +78,7 @@ class CurrencyConversionPage extends React.Component {
         }}>
           <div>
             <TextField
+              id="amount"
               hintText="Amount"
               onChange={this.handleAmountChange}
               value={amount}/>
@@ -86,6 +92,7 @@ class CurrencyConversionPage extends React.Component {
 
           <div>
             <TextField
+              id="converted_amount"
               disabled={true}
               value={convertedAmount}/>
 
@@ -101,13 +108,15 @@ class CurrencyConversionPage extends React.Component {
             }}/>
           </div>
         </div>
+        <div>
+          <HistoricalDataChart exchangeRateHistory={exchangeRateHistory}/>
+        </div>
       </div>
     );
   }
 }
 
 CurrencyConversionPage.propTypes = propTypes;
-
 
 const mapStateToProps = (state) => ({
   currencyConversionState: state.currencyConversionState

@@ -5,7 +5,8 @@ const defaultState = {
   baseCurrency: 'USD',
   targetCurrency: 'EUR',
   amount: 1,
-  convertingInProgress: true
+  convertingInProgress: true,
+  exchangeRateHistory: null
 };
 
 export default function currencyConversionStateReducer(state = defaultState, action) {
@@ -33,6 +34,23 @@ export default function currencyConversionStateReducer(state = defaultState, act
         commonCurrencies: action.payload.data
       };
 
+    case types.RETRIEVE_CURRENCY_HISTORY + '_PENDING':
+      return {
+        ...state,
+        exchangeRateHistory: null
+      };
+    case types.RETRIEVE_CURRENCY_HISTORY + '_FULFILLED': {
+      let data = action.payload.data;
+      let exchangeRateHistory = { currencyCode: data.currencyCode, quotes: [] };
+      data.quotes.map((q) => {
+        exchangeRateHistory.quotes.push({ high: q.high, date: new Date(q.date)});
+      });
+
+      return {
+        ...state,
+        exchangeRateHistory: exchangeRateHistory
+      };
+    }
     case types.SET_BASE_CURRENCY:
       return {
         ...state,

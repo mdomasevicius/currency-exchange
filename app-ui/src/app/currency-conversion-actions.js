@@ -6,7 +6,8 @@ export const types = {
   RETRIEVE_COMMON_CURRENCIES: 'RETRIEVE_COMMON_CURRENCIES',
   SET_BASE_CURRENCY: 'SET_BASE_CURRENCY',
   SET_TARGET_CURRENCY: 'SET_TARGET_CURRENCY',
-  SET_AMOUNT: 'RETRIEVE_COMMON_CURRENCIES'
+  SET_AMOUNT: 'RETRIEVE_COMMON_CURRENCIES',
+  RETRIEVE_CURRENCY_HISTORY: 'RETRIEVE_CURRENCY_HISTORY'
 };
 
 const convert = (baseCurrency, targetCurrency, amount) => ({
@@ -22,6 +23,16 @@ const convert = (baseCurrency, targetCurrency, amount) => ({
   }
 });
 
+const retrieveCurrencyHistory = (currencyCode) => ({
+  type: types.RETRIEVE_CURRENCY_HISTORY,
+  payload: {
+    promise: axios.get('/api/exchange/history', {
+      params: {
+        currencyCode: currencyCode
+      }
+    })
+  }
+});
 
 const retrieveCommonCurrencies = () => ({
   type: types.RETRIEVE_COMMON_CURRENCIES,
@@ -30,14 +41,20 @@ const retrieveCommonCurrencies = () => ({
   }
 });
 
-const changeBaseCurrency = (code) => ({
+const changeBaseCurrencyAndRetrieveHistory = (currencyCode) => (dispatch) => {
+  dispatch(changeBaseCurrency(currencyCode));
+  dispatch(retrieveCurrencyHistory(currencyCode));
+};
+
+const changeBaseCurrency = (currencyCode) => ({
   type: types.SET_BASE_CURRENCY,
-  payload: code
+  payload: currencyCode
 });
 
-const changeTargetCurrency = (code) => ({
+
+const changeTargetCurrency = (currencyCode) => ({
   type: types.SET_TARGET_CURRENCY,
-  payload: code
+  payload: currencyCode
 });
 
 const changeAmount = (amount) => ({
@@ -47,8 +64,10 @@ const changeAmount = (amount) => ({
 
 export const actions = {
   convert: convert,
+  changeAmount: changeAmount,
   retrieveCommonCurrencies: retrieveCommonCurrencies,
   changeBaseCurrency: changeBaseCurrency,
   changeTargetCurrency: changeTargetCurrency,
-  changeAmount: changeAmount
+  retrieveCurrencyHistory: retrieveCurrencyHistory,
+  changeBaseCurrencyAndRetrieveHistory: changeBaseCurrencyAndRetrieveHistory
 };
