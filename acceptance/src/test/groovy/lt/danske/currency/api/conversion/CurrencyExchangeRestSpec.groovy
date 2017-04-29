@@ -64,4 +64,23 @@ class CurrencyExchangeRestSpec extends Specification {
             }
     }
 
+    def 'user can retrieve currency exchange rate history'() {
+        when:
+            def response = rest.get('/api/exchange/history', [currencyCode: 'EUR'])
+        then:
+            response.status == 200
+            with(response.body) {
+                it.currencyCode == 'EUR'
+                it.quotes
+            }
+    }
+
+    def 'legacy currencies may be not found'() {
+        when:
+            def response = rest.get('/api/exchange/history', [currencyCode: 'LTL'])
+        then:
+            response.status == 404
+    }
+
+
 }
