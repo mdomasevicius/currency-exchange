@@ -1,5 +1,5 @@
 import React, {PropTypes} from "react";
-
+import AppBar from 'material-ui/AppBar';
 const propTypes = {
   children: PropTypes.element
 };
@@ -7,7 +7,16 @@ const propTypes = {
 class App extends React.Component {
 
   render() {
-    return this.props.children;
+    return (
+      <div>
+        <AppBar
+          title="Currency Exchange"
+        />
+        <div className="content-wrapper">
+          {this.props.children}
+        </div>
+      </div>
+    );
   }
 }
 
