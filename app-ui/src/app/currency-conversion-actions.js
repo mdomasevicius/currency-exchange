@@ -41,22 +41,31 @@ const retrieveCommonCurrencies = () => ({
     }
 });
 
-const changeBaseCurrencyAndRetrieveHistory = (currencyCode) => (dispatch) => {
-    dispatch(changeBaseCurrency(currencyCode));
-    dispatch(retrieveCurrencyHistory(currencyCode));
+const changeBaseCurrencyAndConvert = (baseCurrency) => (dispatch, getState) => {
+    const {targetCurrency, amount} = getState().currencyConversionState;
+    dispatch(changeBaseCurrency(baseCurrency));
+    dispatch(convert(baseCurrency, targetCurrency, amount));
 };
-
 const changeBaseCurrency = (currencyCode) => ({
     type: types.SET_BASE_CURRENCY,
     payload: currencyCode
 });
 
-
+const changeTargetCurrencyAndConvert = (targetCurrency) => (dispatch, getState) => {
+    const {baseCurrency, amount} = getState().currencyConversionState;
+    dispatch(changeTargetCurrency(targetCurrency));
+    dispatch(convert(baseCurrency, targetCurrency, amount));
+};
 const changeTargetCurrency = (currencyCode) => ({
     type: types.SET_TARGET_CURRENCY,
     payload: currencyCode
 });
 
+const changeAmountAndConvert = (amount) => (dispatch, getState) => {
+    const {baseCurrency, targetCurrency} = getState().currencyConversionState;
+    dispatch(changeAmount(amount));
+    dispatch(convert(baseCurrency, targetCurrency, amount));
+};
 const changeAmount = (amount) => ({
     type: types.SET_AMOUNT,
     payload: amount
@@ -64,10 +73,9 @@ const changeAmount = (amount) => ({
 
 export const actions = {
     convert: convert,
-    changeAmount: changeAmount,
+    changeAmountAndConvert: changeAmountAndConvert,
     retrieveCommonCurrencies: retrieveCommonCurrencies,
-    changeBaseCurrency: changeBaseCurrency,
-    changeTargetCurrency: changeTargetCurrency,
+    changeBaseCurrencyAndConvert: changeBaseCurrencyAndConvert,
+    changeTargetCurrencyAndConvert: changeTargetCurrencyAndConvert,
     retrieveCurrencyHistory: retrieveCurrencyHistory,
-    changeBaseCurrencyAndRetrieveHistory: changeBaseCurrencyAndRetrieveHistory
 };

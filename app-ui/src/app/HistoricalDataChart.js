@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {Chart} from 'react-google-charts';
 
 const propTypes = {
-    exchangeRateHistory: PropTypes.object.isRequired
+    exchangeRateHistory: PropTypes.object
 };
 
 class HistoricalDataChart extends React.Component {

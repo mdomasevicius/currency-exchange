@@ -5,7 +5,7 @@ import {actions} from './currency-conversion-actions';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 import LinearProgress from 'material-ui/LinearProgress';
 import HistoricalDataChart from './HistoricalDataChart';
 
@@ -36,15 +36,16 @@ class CurrencyConversionPage extends React.Component {
     }
 
     handleBaseCurrencyChange(event, index, value) {
-        this.props.actions.changeBaseCurrencyAndRetrieveHistory(value);
+        this.props.actions.changeBaseCurrencyAndConvert(value);
+        this.props.actions.retrieveCurrencyHistory(value);
     }
 
     handleTargetCurrencyChange(event, index, value) {
-        this.props.actions.changeTargetCurrency(value);
+        this.props.actions.changeTargetCurrencyAndConvert(value);
     }
 
     handleAmountChange(event, newValue) {
-        this.props.actions.changeAmount(newValue);
+        this.props.actions.changeAmountAndConvert(newValue);
     }
 
     render() {
@@ -104,12 +105,12 @@ class CurrencyConversionPage extends React.Component {
                             {mappedCurrencyCodes}
                         </DropDownMenu>
                     </div>
-                    <div>
-                        <RaisedButton label="Convert" primary={true} onTouchTap={() => {
-                            this.props.actions.convert(baseCurrency, targetCurrency, amount);
-                        }}/>
-                    </div>
                 </div>
+
+                <div>
+                    <Divider/>
+                </div>
+
                 <div>
                     <HistoricalDataChart exchangeRateHistory={exchangeRateHistory}/>
                 </div>
