@@ -53,6 +53,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
         return getExchangeRateOrFail(response);
     }
 
+    @Cacheable(value = "currency_rates_history")
     @Override
     public YahooCurrencyHistoryDto retrieve10DayExchangeRateHistory(String currencyCode) {
         ResponseEntity<JsonNode> response = rest.getForEntity(
@@ -128,7 +129,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
 
     private URI toCurrencyHistoryUri(String currency, ZonedDateTime from, ZonedDateTime to) {
         String endDate = to.format(ISO_LOCAL_DATE);
-        String startDate = from.minusDays(10).format(ISO_LOCAL_DATE);
+        String startDate = from.format(ISO_LOCAL_DATE);
 
         return UriComponentsBuilder.fromHttpUrl(apiUrl)
             .queryParam("q", String.format(
@@ -144,10 +145,15 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
             .build()
             .toUri();
     }
-
-    @CacheEvict(allEntries = true, value = "currency_rates")
+   @CacheEvict(allEntries = true, value = "currency_rates")
     @Scheduled(cron = "${scheduler.caches.currency_rates:0 */5 * * * *}")
     public void clearCurrencyRateCache() {
         log.info("Currency rate cache cleared.");
+    }
+
+    @CacheEvict(allEntries = true, value = "currency_rates_history")
+    @Scheduled(cron = "${scheduler.caches.currency_rate_history:0 */5 * * * *}")
+    public void clearCurrencyRateHistoryCache() {
+        log.info("Currency rate history cache cleared.");
     }
 }

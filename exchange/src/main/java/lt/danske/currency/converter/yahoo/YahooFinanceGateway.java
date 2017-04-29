@@ -10,4 +10,6 @@ public interface YahooFinanceGateway {
 
     void clearCurrencyRateCache();
 
+    void clearCurrencyRateHistoryCache();
+
 }
