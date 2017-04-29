@@ -1,7 +1,7 @@
 package lt.danske.currency.converter.yahoo;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import lt.danske.currency.converter.ConverterValidationException;
+import lt.danske.currency.converter.ExchangeValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +34,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
             JsonNode.class);
 
         if (response.getStatusCode() != OK) {
-            throw ConverterValidationException.withError(
+            throw ExchangeValidationException.withError(
                 "yahooApi",
                 "responded with " + response.getStatusCode());
         }
@@ -56,7 +56,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
             result = new BigDecimal(rateAsString);
         } catch (Throwable e) {
             log.info("could not parse yahoo api response", e);
-            throw ConverterValidationException.withError(
+            throw ExchangeValidationException.withError(
                 "yahooApi",
                 "could not parse yahoo api response");
         }

@@ -47,4 +47,21 @@ class CurrencyExchangeRestSpec extends Specification {
             }
     }
 
+    def 'invalid currency code produces pretty response'() {
+        when:
+            def response = rest.get('/api/exchange/conversion',
+                [
+                    baseCurrency  : '32',
+                    targetCurrency: '12',
+                    amount        : 100
+                ])
+        then:
+            response.status == 400
+            with(response.body) {
+                it.errors.size() > 1
+                it.errors.find { it.context == 'baseCurrency' }
+                it.errors.find { it.context == 'targetCurrency' }
+            }
+    }
+
 }
