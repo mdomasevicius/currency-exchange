@@ -17,10 +17,10 @@ const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
 
 render(
-  <MuiThemeProvider>
-    <Provider store={store}>
-      <Router history={history} routes={routes}/>
-    </Provider>
-  </MuiThemeProvider>
-  , document.getElementById('app')
+    <MuiThemeProvider>
+        <Provider store={store}>
+            <Router history={history} routes={routes}/>
+        </Provider>
+    </MuiThemeProvider>
+    , document.getElementById('app')
 );
