@@ -15,7 +15,7 @@ import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping("/api/exchange")
-class CurrencyExchangeRest {
+public class CurrencyExchangeRest {
 
     private final CurrencyExchangeService currencyExchangeService;
 
@@ -24,7 +24,7 @@ class CurrencyExchangeRest {
     }
 
     @GetMapping("/conversion")
-    ResponseEntity<CurrencyConversionResource> convert(
+    public ResponseEntity<CurrencyConversionResource> convert(
         @RequestParam String baseCurrency,
         @RequestParam String targetCurrency,
         @RequestParam BigDecimal amount) {
@@ -34,12 +34,12 @@ class CurrencyExchangeRest {
     }
 
     @GetMapping("/currencies")
-    ResponseEntity<List<CurrencyCodeResource>> getCurrencyCodes() {
+    public ResponseEntity<List<CurrencyCodeResource>> getAvailableCurrencyCodes() {
         return ok(CurrencyCodeResource.fromMap(currencyExchangeService.getCommonCurrencyCodes()));
     }
 
     @GetMapping("/history")
-    ResponseEntity<CurrencyHistoryDto> getExchangeRateHistory(@RequestParam String currencyCode) {
+    public ResponseEntity<CurrencyHistoryDto> get10DayExchangeRateHistory(@RequestParam String currencyCode) {
         return ok(currencyExchangeService.findCurrencyRateHistory(currencyCode));
     }
 
