@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.*;
@@ -33,8 +34,8 @@ class CurrencyExchangeRest {
     }
 
     @GetMapping("/currencies")
-    ResponseEntity<Map<String, String>> getCurrencyCodes() {
-        return ok(currencyExchangeService.getCommonCurrencyCodes());
+    ResponseEntity<List<CurrencyCodeResource>> getCurrencyCodes() {
+        return ok(CurrencyCodeResource.fromMap(currencyExchangeService.getCommonCurrencyCodes()));
     }
 
     static class CurrencyConversionResource {

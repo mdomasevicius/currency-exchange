@@ -4,7 +4,7 @@ import lt.danske.currency.api.client.FluentRestClient
 import spock.lang.Shared
 import spock.lang.Specification
 
-class ConversionSpec extends Specification {
+class CurrencyExchangeRestSpec extends Specification {
 
     @Shared
     def rest = FluentRestClient.defaultRestClient()
@@ -42,8 +42,8 @@ class ConversionSpec extends Specification {
             with(response) {
                 it.status == 200
                 it.body
-                it.body.EUR //check some of the most common currencies
-                it.body.USD
+                it.body.find { it.code == 'EUR' } //check some of the most common currencies
+                it.body.find { it.code == 'USD' }
             }
     }
 
