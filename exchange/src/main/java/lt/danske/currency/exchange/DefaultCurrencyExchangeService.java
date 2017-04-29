@@ -12,11 +12,11 @@ import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 import static lt.danske.currency.exchange.ExchangeValidationException.ValidationError;
 import static lt.danske.currency.exchange.ExchangeValidationException.withError;
 
@@ -63,7 +63,7 @@ class DefaultCurrencyExchangeService implements CurrencyExchangeService {
             currencyMap = objectMapper.readValue(
                 IOUtils.toByteArray(this.getClass()
                     .getResourceAsStream("/currencies.json")),
-                new TypeReference<HashMap<String, String>>() {});
+                new TypeReference<TreeMap<String, String>>() {});
         } catch (Throwable e) {
             log.error("Could not load currency list.", e);
             throw withError("currencies.json", "failed to load");
