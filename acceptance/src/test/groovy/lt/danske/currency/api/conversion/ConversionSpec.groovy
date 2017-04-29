@@ -35,4 +35,16 @@ class ConversionSpec extends Specification {
             [baseCurrency: 'EUR', targetCurrency: 'USD'] || 400
     }
 
+    def 'use can get common currency codes'() {
+        when:
+            def response = rest.get('/api/exchange/currencies')
+        then:
+            with(response) {
+                it.status == 200
+                it.body
+                it.body.EUR //check some of the most common currencies
+                it.body.USD
+            }
+    }
+
 }
