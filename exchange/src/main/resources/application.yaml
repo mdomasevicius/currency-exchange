@@ -4,4 +4,4 @@ yahoo-finance:
 scheduler:
     caches:
         currency_rates: '0 */5 * * * *'
-        currency_rate_history: '0 */5 * * * *'
+        currency_rate_history: '0 0 0 * * *'

@@ -151,7 +151,7 @@ class DefaultYahooFinanceGateway implements YahooFinanceGateway {
     }
 
     @CacheEvict(allEntries = true, value = "currency_rates_history")
-    @Scheduled(cron = "${scheduler.caches.currency_rate_history:0 */5 * * * *}")
+    @Scheduled(cron = "${scheduler.caches.currency_rate_history:0 0 0 0 * *}")
     public void clearCurrencyRateHistoryCache() {
         log.info("Currency rate history cache cleared.");
     }
