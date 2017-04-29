@@ -4,15 +4,27 @@ const defaultState = {
   commonCurrencies: [],
   baseCurrency: 'USD',
   targetCurrency: 'EUR',
-  amount: 1
+  amount: 1,
+  convertingInProgress: true
 };
 
 export default function currencyConversionStateReducer(state = defaultState, action) {
   switch (action.type) {
+    case types.CONVERT_CURRENCY + '_PENDING':
+      return {
+        ...state,
+        convertingInProgress: true
+      };
     case types.CONVERT_CURRENCY + '_FULFILLED':
       return {
         ...state,
-        convertedAmount: action.payload.data.convertedAmount
+        convertedAmount: action.payload.data.convertedAmount,
+        convertingInProgress: false
+      };
+    case types.CONVERT_CURRENCY + '_REJECTED':
+      return {
+        ...state,
+        convertingInProgress: false
       };
 
     case types.RETRIEVE_COMMON_CURRENCIES + '_FULFILLED':

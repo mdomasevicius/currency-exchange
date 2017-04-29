@@ -6,6 +6,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import LinearProgress from 'material-ui/LinearProgress';
 
 const propTypes = {
   actions: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
@@ -50,7 +51,8 @@ class CurrencyConversionPage extends React.Component {
       commonCurrencies,
       targetCurrency,
       baseCurrency,
-      amount
+      amount,
+      convertingInProgress
     } = this.props.currencyConversionState;
 
     const mappedCurrencyCodes = commonCurrencies.map((c) => {
@@ -58,35 +60,46 @@ class CurrencyConversionPage extends React.Component {
     });
 
     return (
-      <div>
-        <div>
-          <TextField
-            hintText="Amount"
-            onChange={this.handleAmountChange}
-            value={amount}/>
-
-          <DropDownMenu
-            onChange={this.handleBaseCurrencyChange}
-            value={baseCurrency}>
-            {mappedCurrencyCodes}
-          </DropDownMenu>
+      <div >
+        <div style={{height: '10vh'}}>
+          <LinearProgress style={convertingInProgress ? '' : {display: 'none'} } mode="indeterminate"/>
         </div>
 
-        <div>
-          <TextField
-            disabled={true}
-            value={convertedAmount}/>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexFlow: 'column'
+        }}>
+          <div>
+            <TextField
+              hintText="Amount"
+              onChange={this.handleAmountChange}
+              value={amount}/>
 
-          <DropDownMenu
-            onChange={this.handleTargetCurrencyChange}
-            value={targetCurrency}>
-            {mappedCurrencyCodes}
-          </DropDownMenu>
-        </div>
-        <div>
-          <RaisedButton label="Convert" primary={true} onTouchTap={() => {
-            this.props.actions.convert(baseCurrency, targetCurrency, amount);
-          }}/>
+            <DropDownMenu
+              onChange={this.handleBaseCurrencyChange}
+              value={baseCurrency}>
+              {mappedCurrencyCodes}
+            </DropDownMenu>
+          </div>
+
+          <div>
+            <TextField
+              disabled={true}
+              value={convertedAmount}/>
+
+            <DropDownMenu
+              onChange={this.handleTargetCurrencyChange}
+              value={targetCurrency}>
+              {mappedCurrencyCodes}
+            </DropDownMenu>
+          </div>
+          <div>
+            <RaisedButton label="Convert" primary={true} onTouchTap={() => {
+              this.props.actions.convert(baseCurrency, targetCurrency, amount);
+            }}/>
+          </div>
         </div>
       </div>
     );
