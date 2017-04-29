@@ -1,14 +1,10 @@
-package lt.danske.currency.converter.yahoo;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package lt.danske.currency.exchange;
 
 import java.math.BigDecimal;
 
-public class YahooQuoteDto {
+public class QuoteDto {
 
-    @JsonProperty("Date")
     private String date;
-    @JsonProperty("High")
     private BigDecimal high;
 
     public String getDate() {

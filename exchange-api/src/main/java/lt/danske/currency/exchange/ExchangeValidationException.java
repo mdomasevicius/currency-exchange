@@ -1,4 +1,4 @@
-package lt.danske.currency.converter;
+package lt.danske.currency.exchange;
 
 import java.util.Collection;
 

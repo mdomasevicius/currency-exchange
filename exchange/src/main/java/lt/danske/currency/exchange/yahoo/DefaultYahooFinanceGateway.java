@@ -1,15 +1,14 @@
-package lt.danske.currency.converter.yahoo;
+package lt.danske.currency.exchange.yahoo;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.danske.currency.converter.ExchangeValidationException;
-import lt.danske.currency.converter.NotFoundException;
+import lt.danske.currency.exchange.ExchangeValidationException;
+import lt.danske.currency.exchange.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

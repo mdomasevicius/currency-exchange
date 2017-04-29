@@ -1,7 +1,7 @@
-package lt.danske.currency.converter
+package lt.danske.currency.exchange
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import lt.danske.currency.converter.yahoo.YahooFinanceGateway
+import lt.danske.currency.exchange.yahoo.YahooFinanceGateway
 import spock.lang.Specification
 import spock.lang.Unroll
 

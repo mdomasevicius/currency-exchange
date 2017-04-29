@@ -1,4 +1,4 @@
-package lt.danske.currency.converter.yahoo;
+package lt.danske.currency.exchange.yahoo;
 
 import java.math.BigDecimal;
 

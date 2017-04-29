@@ -1,4 +1,4 @@
-package lt.danske.currency.converter.yahoo;
+package lt.danske.currency.exchange.yahoo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

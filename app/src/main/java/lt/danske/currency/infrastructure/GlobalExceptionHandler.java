@@ -1,7 +1,7 @@
 package lt.danske.currency.infrastructure;
 
-import lt.danske.currency.converter.ExchangeValidationException;
-import lt.danske.currency.converter.NotFoundException;
+import lt.danske.currency.exchange.ExchangeValidationException;
+import lt.danske.currency.exchange.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;

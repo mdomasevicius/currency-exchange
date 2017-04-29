@@ -1,9 +1,9 @@
-package lt.danske.currency.converter;
+package lt.danske.currency.exchange;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lt.danske.currency.converter.yahoo.YahooCurrencyHistoryDto;
-import lt.danske.currency.converter.yahoo.YahooFinanceGateway;
+import lt.danske.currency.exchange.yahoo.YahooCurrencyHistoryDto;
+import lt.danske.currency.exchange.yahoo.YahooFinanceGateway;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +14,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
 import static java.util.stream.Collectors.*;
-import static lt.danske.currency.converter.ExchangeValidationException.ValidationError;
-import static lt.danske.currency.converter.ExchangeValidationException.withError;
+import static lt.danske.currency.exchange.ExchangeValidationException.ValidationError;
+import static lt.danske.currency.exchange.ExchangeValidationException.withError;
 
 @Service
 class DefaultCurrencyExchangeService implements CurrencyExchangeService {
