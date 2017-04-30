@@ -1,6 +1,7 @@
 import React, {PropTypes} from "react";
 import {Tab, Tabs} from "material-ui/Tabs";
 import CurrencyConversionPage from "../currency-conversion/CurrencyConversionPage";
+import CurrencyPurchasePage from "../currency-purchase/CurrencyPurchasePage";
 
 const propTypes = {
     children: PropTypes.element
@@ -27,7 +28,7 @@ class HomePage extends React.Component {
                 </Tab>
                 <Tab label="Currency Purchase" >
                     <div>
-                        <h1>Under Construction</h1>
+                        <CurrencyPurchasePage/>
                     </div>
                 </Tab>
             </Tabs>
