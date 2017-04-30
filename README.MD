@@ -38,6 +38,7 @@ To minimize the scope, the following were not implemented:
 - Mock yahoo finance application for development environment
 - UI tests
 - More appropriate separation of concerns
+- Currency rate history is always between `baseCurrency` and USD (API limitations)
 
 ## TODO
 - clean up dependencies

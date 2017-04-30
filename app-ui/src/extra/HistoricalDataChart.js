@@ -2,12 +2,13 @@ import React, {PropTypes} from 'react';
 import {Chart} from 'react-google-charts';
 
 const propTypes = {
-    exchangeRateHistory: PropTypes.object
+    exchangeRateHistory: PropTypes.object,
+    currentAmount: PropTypes.number
 };
 
 class HistoricalDataChart extends React.Component {
     render() {
-        const {exchangeRateHistory} = this.props;
+        const {exchangeRateHistory, currentAmount} = this.props;
 
         if (!exchangeRateHistory) {
             return (
@@ -21,10 +22,11 @@ class HistoricalDataChart extends React.Component {
             );
         }
 
-        const data = [];
-        data.push([exchangeRateHistory.currencyCode, 'Rate']);
+        const rows = [];
         exchangeRateHistory.quotes.map((quote) => {
-            data.push([quote.date, Number.parseFloat(quote.high)]);
+            let highRate = Number.parseFloat(quote.high);
+            let tooltip = currentAmount ? 'Could have bought ' + highRate * currentAmount + ' (USD)' : '' + highRate;
+            rows.push([quote.date, highRate, tooltip]);
         });
 
         return (
@@ -33,9 +35,23 @@ class HistoricalDataChart extends React.Component {
             }}>
                 <Chart
                     chartType="LineChart"
-                    data={data}
+                    columns={[
+                        {
+                            type: 'date',
+                            label: 'Date',
+                        },
+                        {
+                            type: 'number',
+                            label: 'Rate',
+                        },
+                        {
+                            type: 'string',
+                            role: 'tooltip'
+                        }
+                    ]}
+                    rows={rows}
                     options={{
-                        title: 'Exchange rate USD/' + exchangeRateHistory.currencyCode + ' (10 days)'
+                        title: 'Exchange rate ' + exchangeRateHistory.currencyCode + '/USD (10 days)'
                     }}
                     graph_id="exchangeRateHistory"
                     width="100%"

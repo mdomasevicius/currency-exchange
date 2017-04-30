@@ -85,7 +85,7 @@ class CurrencyExchangePage extends React.Component {
                     <div>
                         <h1>Currency Exchange</h1>
                     </div>
-                    
+
                     <div>
                         <TextField
                             floatingLabelText="Amount"
@@ -128,7 +128,9 @@ class CurrencyExchangePage extends React.Component {
                 </div>
 
                 <div>
-                    <HistoricalDataChart exchangeRateHistory={exchangeRateHistory}/>
+                    <HistoricalDataChart
+                        currentAmount={amount}
+                        exchangeRateHistory={exchangeRateHistory}/>
                 </div>
             </div>
         );
