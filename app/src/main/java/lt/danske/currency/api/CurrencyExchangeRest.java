@@ -33,6 +33,15 @@ public class CurrencyExchangeRest {
         return ok(new CurrencyConversionResource(convertedAmount));
     }
 
+    @GetMapping("/purchase")
+    public ResponseEntity<CurrencyConversionResource> purchase(
+        @RequestParam String baseCurrency,
+        @RequestParam String targetCurrency,
+        @RequestParam BigDecimal amount
+    ) {
+        return ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/currencies")
     public ResponseEntity<List<CurrencyCodeResource>> getAvailableCurrencyCodes() {
         return ok(CurrencyCodeResource.fromMap(currencyExchangeService.getCommonCurrencyCodes()));
