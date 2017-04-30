@@ -56,6 +56,13 @@ class DefaultCurrencyExchangeService implements CurrencyExchangeService {
     }
 
     @Override
+    public BigDecimal purchase(String baseCurrency, String targetCurrency, BigDecimal amount) {
+        BigDecimal inverseRate = yahooFinanceGateway.retrieveExchangeRate(targetCurrency, baseCurrency);
+        return amount.multiply(inverseRate)
+            .setScale(2, ROUND_HALF_UP);
+    }
+
+    @Override
     public Map<String, String> getCommonCurrencyCodes() {
         Map<String, String> currencyMap;
 

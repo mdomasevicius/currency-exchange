@@ -11,7 +11,7 @@ class CurrencyExchangeSpec extends Specification {
     def currencyExchangeService = new DefaultCurrencyExchangeService(yahooFinanceGateway, new ObjectMapper())
 
     @Unroll
-    def 'when #amount (#baseCurrency) converted to #targetCurrency with rate of #rate should be #expectedAmount'() {
+    def 'when #amount (#baseCurrency) converted to #targetCurrency with rate of #rate should be #expectedAmount (#targetCurrency)'() {
         given:
             yahooFinanceGateway.retrieveExchangeRate(_, _) >> BigDecimal.valueOf(rate)
         expect:
@@ -23,6 +23,21 @@ class CurrencyExchangeSpec extends Specification {
             'AUD'        | 'CAD'          | 300    || 2       | 600
             'EUR'        | 'LTL'          | 56844  || 0.93241 | 53001.91
             'NZD'        | 'LTL'          | 33     || 0.9444  | 31.17 //31.1652
+    }
+
+    @Unroll
+    def 'when user wishes to purchase (#targetCurrency) and has (#amount) of #baseCurrency with rate of #inverseRate - should pay #expectedAmount (#targetCurrency)'() {
+        given:
+            yahooFinanceGateway.retrieveExchangeRate(_, _) >> BigDecimal.valueOf(inverseRate)
+        expect:
+            expectedAmount == currencyExchangeService.purchase(baseCurrency, targetCurrency, amount)
+        where:
+            baseCurrency | targetCurrency | amount || inverseRate | expectedAmount
+            'USD'        | 'EUR'          | 100    || 0.9         | 90
+            'USD'        | 'RUB'          | 150    || 0.5         | 75
+            'AUD'        | 'CAD'          | 300    || 2           | 600
+            'EUR'        | 'LTL'          | 56844  || 0.93241     | 53001.91
+            'NZD'        | 'LTL'          | 33     || 0.9444      | 31.17 //31.1652
     }
 
     def 'should throw IllegalArgumentException if any argument is null'() {

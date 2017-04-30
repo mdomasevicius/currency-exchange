@@ -34,12 +34,13 @@ public class CurrencyExchangeRest {
     }
 
     @GetMapping("/purchase")
-    public ResponseEntity<CurrencyConversionResource> purchase(
+    public ResponseEntity<CurrencyPurchaseResource> purchase(
         @RequestParam String baseCurrency,
         @RequestParam String targetCurrency,
         @RequestParam BigDecimal amount
     ) {
-        return ResponseEntity.badRequest().build();
+        BigDecimal requiredAmount = currencyExchangeService.purchase(baseCurrency, targetCurrency, amount);
+        return ok(new CurrencyPurchaseResource(requiredAmount));
     }
 
     @GetMapping("/currencies")
@@ -52,16 +53,4 @@ public class CurrencyExchangeRest {
         return ok(currencyExchangeService.findCurrencyRateHistory(currencyCode));
     }
 
-    static class CurrencyConversionResource {
-
-        private final BigDecimal convertedAmount;
-
-        CurrencyConversionResource(BigDecimal convertedAmount) {
-            this.convertedAmount = convertedAmount;
-        }
-
-        public BigDecimal getConvertedAmount() {
-            return convertedAmount;
-        }
-    }
 }
