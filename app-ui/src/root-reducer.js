@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {routerReducer} from 'react-router-redux';
-import currencyConversionState from './app/currency-conversion-reducer';
+import currencyConversionState from './currency-conversion/currency-conversion-reducer';
 
 const rootReducer = combineReducers({
     currencyConversionState,

@@ -7,7 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Divider from 'material-ui/Divider';
 import LinearProgress from 'material-ui/LinearProgress';
-import HistoricalDataChart from './HistoricalDataChart';
+import HistoricalDataChart from '../extra/HistoricalDataChart';
 
 const propTypes = {
     actions: PropTypes.objectOf(PropTypes.func.isRequired).isRequired,
