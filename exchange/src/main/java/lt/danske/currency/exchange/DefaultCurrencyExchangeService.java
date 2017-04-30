@@ -38,6 +38,27 @@ class DefaultCurrencyExchangeService implements CurrencyExchangeService {
         Assert.notNull(targetCurrency, "targetCurrency can not be null");
         Assert.notNull(amount, "amount can not be null");
 
+        validateCurrencyCodes(baseCurrency, targetCurrency);
+
+        BigDecimal rate = yahooFinanceGateway.retrieveExchangeRate(baseCurrency, targetCurrency);
+        return amount.multiply(rate)
+            .setScale(2, ROUND_HALF_UP);
+    }
+
+    @Override
+    public BigDecimal purchase(String baseCurrency, String targetCurrency, BigDecimal amount) {
+        Assert.notNull(baseCurrency, "baseCurrency can not be null");
+        Assert.notNull(targetCurrency, "targetCurrency can not be null");
+        Assert.notNull(amount, "amount can not be null");
+
+        validateCurrencyCodes(baseCurrency, targetCurrency);
+
+        BigDecimal inverseRate = yahooFinanceGateway.retrieveExchangeRate(targetCurrency, baseCurrency);
+        return amount.multiply(inverseRate)
+            .setScale(2, ROUND_HALF_UP);
+    }
+
+    private void validateCurrencyCodes(String baseCurrency, String targetCurrency) {
         Map<String, String> commonCurrencyCodes = getCommonCurrencyCodes();
         ArrayList<ValidationError> validationErrors = new ArrayList<>();
         if (!commonCurrencyCodes.containsKey(baseCurrency)) {
@@ -49,17 +70,6 @@ class DefaultCurrencyExchangeService implements CurrencyExchangeService {
         if (validationErrors.size() > 0) {
             throw new ExchangeValidationException(validationErrors);
         }
-
-        BigDecimal rate = yahooFinanceGateway.retrieveExchangeRate(baseCurrency, targetCurrency);
-        return amount.multiply(rate)
-            .setScale(2, ROUND_HALF_UP);
-    }
-
-    @Override
-    public BigDecimal purchase(String baseCurrency, String targetCurrency, BigDecimal amount) {
-        BigDecimal inverseRate = yahooFinanceGateway.retrieveExchangeRate(targetCurrency, baseCurrency);
-        return amount.multiply(inverseRate)
-            .setScale(2, ROUND_HALF_UP);
     }
 
     @Override

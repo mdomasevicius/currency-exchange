@@ -40,9 +40,8 @@ class CurrencyExchangeSpec extends Specification {
             'NZD'        | 'LTL'          | 33     || 0.9444      | 31.17 //31.1652
     }
 
-    def 'should throw IllegalArgumentException if any argument is null'() {
+    def 'convert must throw IllegalArgumentException if any argument is null'() {
         when:
-            yahooFinanceGateway.retrieveExchangeRate(_, _) >> BigDecimal.valueOf(1)
             currencyExchangeService.convert(baseCurrency, targetCurrency, amount)
         then:
             thrown IllegalArgumentException
@@ -53,12 +52,50 @@ class CurrencyExchangeSpec extends Specification {
             'AUD'        | 'CAD'          | null
     }
 
+    @Unroll
+    def 'convert #message'() {
+        when:
+            currencyExchangeService.purchase(baseCurrency, targetCurrency, 100)
+        then:
+            thrown ExchangeValidationException
+        where:
+            baseCurrency | targetCurrency | message
+            'X'          | 'EUR'          | 'must throw ExchangeValidationException if baseCurrency is invalid'
+            'USD'        | 'X'            | 'must throw ExchangeValidationException if targetCurrency is invalid'
+            'Z'          | 'W'            | 'must throw ExchangeValidationException if baseCurrency and targetCurrency are invalid'
+    }
+
+    def 'purchase must throw IllegalArgumentException if any argument is null'() {
+        when:
+            currencyExchangeService.purchase(baseCurrency, targetCurrency, amount)
+        then:
+            thrown IllegalArgumentException
+        where:
+            baseCurrency | targetCurrency | amount
+            null         | 'EUR'          | 100
+            'USD'        | null           | 150
+            'AUD'        | 'CAD'          | null
+    }
+
+    @Unroll
+    def 'purchase #message'() {
+        when:
+            currencyExchangeService.purchase(baseCurrency, targetCurrency, 100)
+        then:
+            thrown ExchangeValidationException
+        where:
+            baseCurrency | targetCurrency | message
+            'X'          | 'EUR'          | 'must throw ExchangeValidationException if baseCurrency is invalid'
+            'USD'        | 'X'            | 'must throw ExchangeValidationException if targetCurrency is invalid'
+            'Z'          | 'W'            | 'must throw ExchangeValidationException if baseCurrency and targetCurrency are invalid'
+    }
+
     def 'must provide common currency codes'() {
         when:
             def commonCurrencies = currencyExchangeService.getCommonCurrencyCodes()
         then:
             commonCurrencies
-            commonCurrencies.size() > 0
+            commonCurrencies.find()
     }
 
 }
