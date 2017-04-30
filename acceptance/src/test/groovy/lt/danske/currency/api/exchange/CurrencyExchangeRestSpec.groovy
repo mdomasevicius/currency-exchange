@@ -1,4 +1,4 @@
-package lt.danske.currency.api.conversion
+package lt.danske.currency.api.exchange
 
 import lt.danske.currency.api.client.FluentRestClient
 import spock.lang.Shared
@@ -25,9 +25,35 @@ class CurrencyExchangeRestSpec extends Specification {
             }
     }
 
-    def 'all query parameters are required'() {
+    def 'user can purchase currencies'() {
+        when:
+            def response = rest.get(
+                '/api/exchange/purchase',
+                [
+                    baseCurrency  : 'EUR',
+                    targetCurrency: 'USD',
+                    amount        : 100
+                ])
+        then:
+            with(response) {
+                it.status == 200
+                it.body.requiredAmount
+            }
+    }
+
+    def 'all query parameters for conversion are required'() {
         expect:
             rest.get('/api/exchange/conversion').status == expectedResponse
+        where:
+            queryParams                                  || expectedResponse
+            [targetCurrency: 'USD', amount: 100]         || 400
+            [baseCurrency: 'EUR', amount: 100]           || 400
+            [baseCurrency: 'EUR', targetCurrency: 'USD'] || 400
+    }
+
+    def 'all query parameters for purchase are required'() {
+        expect:
+            rest.get('/api/exchange/purchase').status == expectedResponse
         where:
             queryParams                                  || expectedResponse
             [targetCurrency: 'USD', amount: 100]         || 400
