@@ -83,6 +83,10 @@ class CurrencyExchangePage extends React.Component {
                     flexFlow: 'column'
                 }}>
                     <div>
+                        <h1>Currency Exchange</h1>
+                    </div>
+                    
+                    <div>
                         <TextField
                             floatingLabelText="Amount"
                             id="amount"
