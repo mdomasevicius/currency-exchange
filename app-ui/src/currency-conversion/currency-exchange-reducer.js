@@ -1,31 +1,49 @@
-import {types} from './currency-conversion-actions';
+import {types} from './currency-exchange-actions';
 const defaultState = {
     convertedAmount: 0,
+    requiredAmount: 0,
     commonCurrencies: [],
     baseCurrency: 'USD',
     targetCurrency: 'EUR',
     amount: 1,
-    convertingInProgress: true,
+    convertInProgress: true,
+    purchaseInProgress: true,
     exchangeRateHistory: null
 };
 
 export default function currencyConversionStateReducer(state = defaultState, action) {
     switch (action.type) {
+        case types.PURCHASE + '_PENDING':
+            return {
+                ...state,
+                purchaseInProgress: true
+            };
+        case types.PURCHASE + '_FULFILLED':
+            return {
+                ...state,
+                requiredAmount: action.payload.data.requiredAmount,
+                purchaseInProgress: false
+            };
+        case types.PURCHASE + '_REJECTED':
+            return {
+                ...state,
+                purchaseInProgress: false
+            };
         case types.CONVERT_CURRENCY + '_PENDING':
             return {
                 ...state,
-                convertingInProgress: true
+                convertInProgress: true
             };
         case types.CONVERT_CURRENCY + '_FULFILLED':
             return {
                 ...state,
                 convertedAmount: action.payload.data.convertedAmount,
-                convertingInProgress: false
+                convertInProgress: false
             };
         case types.CONVERT_CURRENCY + '_REJECTED':
             return {
                 ...state,
-                convertingInProgress: false
+                convertInProgress: false
             };
 
         case types.RETRIEVE_COMMON_CURRENCIES + '_FULFILLED':

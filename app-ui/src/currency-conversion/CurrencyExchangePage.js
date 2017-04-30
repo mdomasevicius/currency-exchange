@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {actions} from './currency-conversion-actions';
+import {actions} from './currency-exchange-actions';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -14,7 +14,7 @@ const propTypes = {
     currencyConversionState: PropTypes.object.isRequired
 };
 
-class CurrencyConversionPage extends React.Component {
+class CurrencyExchangePage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -24,38 +24,43 @@ class CurrencyConversionPage extends React.Component {
     }
 
     componentWillMount() {
-        const {
-            targetCurrency,
-            baseCurrency,
-            amount
-        } = this.props.currencyConversionState;
+        const {baseCurrency} = this.props.currencyConversionState;
 
         this.props.actions.retrieveCommonCurrencies();
-        this.props.actions.convert(baseCurrency, targetCurrency, amount);
+        this.props.actions.convertFromState();
+        this.props.actions.purchaseFromState();
         this.props.actions.retrieveCurrencyHistory(baseCurrency);
     }
 
     handleBaseCurrencyChange(event, index, value) {
-        this.props.actions.changeBaseCurrencyAndConvert(value);
+        this.props.actions.changeBaseCurrency(value);
         this.props.actions.retrieveCurrencyHistory(value);
+        this.props.actions.convertFromState();
+        this.props.actions.purchaseFromState();
     }
 
     handleTargetCurrencyChange(event, index, value) {
-        this.props.actions.changeTargetCurrencyAndConvert(value);
+        this.props.actions.changeTargetCurrency(value);
+        this.props.actions.convertFromState();
+        this.props.actions.purchaseFromState();
     }
 
     handleAmountChange(event, newValue) {
-        this.props.actions.changeAmountAndConvert(newValue);
+        this.props.actions.changeAmount(newValue);
+        this.props.actions.convertFromState();
+        this.props.actions.purchaseFromState();
     }
 
     render() {
         const {
             convertedAmount,
+            requiredAmount,
             commonCurrencies,
             targetCurrency,
             baseCurrency,
             amount,
-            convertingInProgress,
+            convertInProgress,
+            purchaseInProgress,
             exchangeRateHistory
         } = this.props.currencyConversionState;
 
@@ -66,9 +71,9 @@ class CurrencyConversionPage extends React.Component {
         return (
             <div >
                 <div style={{height: '10vh'}}>
-          <span style={convertingInProgress ? {} : {display: 'none'}}>
-            <LinearProgress mode="indeterminate"/>
-          </span>
+                    <span style={convertInProgress || purchaseInProgress ? {} : {display: 'none'}}>
+                        <LinearProgress mode="indeterminate"/>
+                    </span>
                 </div>
 
                 <div style={{
@@ -104,9 +109,16 @@ class CurrencyConversionPage extends React.Component {
                             value={targetCurrency}>
                             {mappedCurrencyCodes}
                         </DropDownMenu>
+
+                        <TextField
+                            floatingLabelText="Required Amount"
+                            id="required_amount"
+                            disabled={true}
+                            value={requiredAmount}/>
                     </div>
                 </div>
 
+                <div style={{height: '10vh'}}/>
                 <div>
                     <Divider/>
                 </div>
@@ -119,7 +131,7 @@ class CurrencyConversionPage extends React.Component {
     }
 }
 
-CurrencyConversionPage.propTypes = propTypes;
+CurrencyExchangePage.propTypes = propTypes;
 
 const mapStateToProps = (state) => ({
     currencyConversionState: state.currencyConversionState
@@ -129,4 +141,4 @@ const mapDispatchToProps = (dispatch) => ({
     actions: bindActionCreators(actions, dispatch)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CurrencyConversionPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CurrencyExchangePage);

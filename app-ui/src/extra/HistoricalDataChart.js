@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import {Chart} from 'react-google-charts';
 
 const propTypes = {
-    exchangeRateHistory: PropTypes.object.isRequired
+    exchangeRateHistory: PropTypes.object
 };
 
 class HistoricalDataChart extends React.Component {
@@ -16,7 +16,7 @@ class HistoricalDataChart extends React.Component {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <h3>No historical data available</h3>
+                    <h3>No historical data available - try changing currencies</h3>
                 </div>
             );
         }
